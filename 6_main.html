@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>욱스타그램</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .navbar {
+            background-color: white;
+            width: 100%;
+            padding: 10px 20px;
+            border-bottom: 1px solid #dbdbdb;
+            text-align: center;
+            position: fixed;
+            top: 0;
+        }
+
+        .container {
+            margin-top: 80px;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-picture {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"], input[type="text"], textarea {
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border: 1px solid #dbdbdb;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3897f0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin: 10px 0;
+        }
+
+        .card p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .link-container {
+            margin-top: 20px;
+        }
+
+        .link-container a {
+            color: #3897f0;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <div class="navbar">
+        <h1>내 프로필 설정</h1>
+    </div>
+
+    <!-- 프로필 정보 입력 및 생성 컨테이너 -->
+    <div class="container">
+        <!-- 명함 표시 -->
+        <div class="card" id="profile-card" style="display: none;">
+            <img id="card-img" alt="프로필 사진">
+            <h2 id="card-name"></h2>
+            <p id="card-bio"></p>
+        </div>
+
+        <!-- 프로필 사진 업로드 및 정보 입력 -->
+        <div class="profile-picture">
+            <label for="profile-upload">프로필 사진 업로드</label>
+            <input type="file" id="profile-upload" accept="image/*">
+        </div>
+        <input type="text" id="name" placeholder="이름 입력">
+        <textarea id="bio" rows="3" placeholder="사용자 설명 입력"></textarea>
+        <button onclick="createBusinessCard()">프로필 저장</button>
+
+        <!-- 7_detail.html 링크 -->
+        <div class="link-container" id="link-container" style="display: none;">
+            <a href="7_detail.html" id="view-profile-link">내 프로필 보기</a>
+        </div>
+    </div>
+
+    <script>
+        function createBusinessCard() {
+            // 프로필 사진 처리
+            const input = document.getElementById('profile-upload');
+            const cardImg = document.getElementById('card-img');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    cardImg.src = e.target.result;
+                    localStorage.setItem("profilePic", e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                alert("파일을 선택해주세요.");
+                return;
+            }
+
+            // 이름, 설명 정보 설정
+            const name = document.getElementById('name').value;
+            const bio = document.getElementById('bio').value;
+
+            if (!name || !bio) {
+                alert("모든 정보를 입력해주세요.");
+                return;
+            }
+
+            document.getElementById('card-name').innerText = name;
+            document.getElementById('card-bio').innerText = bio;
+
+            // 명함 저장
+            localStorage.setItem("profileName", name);
+            localStorage.setItem("profileBio", bio);
+
+            // 명함 표시
+            document.getElementById('profile-card').style.display = 'flex';
+
+            // 프로필 보기 링크 표시
+            document.getElementById('link-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
